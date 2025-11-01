@@ -9,7 +9,7 @@ permissions:
   contents: write           # Allow pushing changes
 
 jobs:
-  scrape-bitcoin:
+  scrape-ebay:
     runs-on: ubuntu-latest
     env:
       TZ: America/New_York
