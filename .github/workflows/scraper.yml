@@ -2,14 +2,18 @@ name: Ebay products Scraper (Every 3 hours)
 
 on:
   schedule:
-    - cron:  '0 */3 * * *'   # Run every 3 hours
+    - cron: '0 */3 * * *'  # Run every 3 hours
   workflow_dispatch:        # Allows manual triggering
+
+permissions:
+  contents: write           # Allow pushing changes
 
 jobs:
   scrape-bitcoin:
     runs-on: ubuntu-latest
     env:
-      TZ: America/New_York  # Set your local timezone if needed
+      TZ: America/New_York
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,7 +26,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser
           pip install selenium pandas webdriver-manager fake-useragent
 
       - name: Run Selenium scraper
@@ -32,6 +35,8 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add ebay_tech_deals.csv
-          git commit -m "Updated Ebay products data (3 hours intervals)"
-          git push
+          git diff --quiet && echo "No changes to commit" || (
+            git add ebay_tech_deals.csv
+            git commit -m "Updated Ebay products data (3-hour intervals)"
+            git push origin main
+          )
