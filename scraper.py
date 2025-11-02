@@ -76,7 +76,7 @@ def scrape_product_data(driver):
 
     scroll_down_page(driver)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    products = driver.find_elements(By.CSS_SELECTOR, 'div.vi-grid')
+    products = driver.find_elements(By.CSS_SELECTOR, 'div[itemscope][itemtype="https://schema.org/Product"]')
 
     for p in products:
         rows.append(scrape_product(p, timestamp, driver))
